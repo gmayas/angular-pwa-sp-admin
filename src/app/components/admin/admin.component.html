@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Admin Articulos</title>
+</head>
+
+<body>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Add articulo:</h3>
+      <form [formGroup]="adminForm" autocomplete="on">
+        <div class="form-group">
+          <input type="hidden" formControlName="id" class="form-control"
+            [(ngModel)]="catalogoService.selectCatalogo.id" />
+        </div>
+        <div class="form-group">
+          <label>Grupo</label>
+          <input type="text" formControlName="grupo" class="form-control"
+            [(ngModel)]="catalogoService.selectCatalogo.grupo"
+            [ngClass]="{ 'is-invalid': submitted && f.grupo.errors }" />
+          <div *ngIf="submitted && f.grupo.errors" class="invalid-feedback">
+            <div *ngIf="f.grupo.errors.required">Grupo is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Clave de articulo</label>
+          <input type="text" formControlName="claveart" class="form-control"
+            [(ngModel)]="catalogoService.selectCatalogo.claveart"
+            [ngClass]="{ 'is-invalid': submitted && f.claveart.errors }" />
+          <div *ngIf="submitted && f.claveart.errors" class="invalid-feedback">
+            <div *ngIf="f.claveart.errors.required">Clave de articulo is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Articulo</label>
+          <textarea ype="text" formControlName="articulo" class="form-control"
+            [(ngModel)]="catalogoService.selectCatalogo.articulo"
+            [ngClass]="{ 'is-invalid': submitted && f.articulo.errors }" rows="3"></textarea>
+          <!--<input type="text" formControlName="articulo" class="form-control" 
+            [(ngModel)]="catalogoService.selectCatalogo.articulo"
+            [ngClass]="{ 'is-invalid': submitted && f.articulo.errors }" />
+          -->
+          <div *ngIf="submitted && f.articulo.errors" class="invalid-feedback">
+            <div *ngIf="f.articulo.errors.required">Articulo is required</div>
+          </div>
+        </div>
+        <!--<div class="form-group">
+          <label>Impuesto</label>
+          <input type="number" formControlName="impuesto" class="form-control"
+          [(ngModel)]="catalogoService.selectCatalogo.impuesto" 
+            [ngClass]="{ 'is-invalid': submitted && f.impuesto.errors }" />
+          <div *ngIf="submitted && f.impuesto.errors" class="invalid-feedback">
+            <div *ngIf="f.impuesto.errors.required">Impuesto is required</div>
+          </div>
+        </div> -->
+        <div class="form-group">
+          <label class="control-label">Impuesto</label>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input type="number" formControlName="impuesto" class="form-control" aria-label="Porcentaje de impuesto"
+                [(ngModel)]="catalogoService.selectCatalogo.impuesto"
+                [ngClass]="{ 'is-invalid': submitted && f.impuesto.errors }" />
+              <div class="input-group-prepend">
+                <span class="input-group-text">%</span>
+              </div>
+              <div *ngIf="submitted && f.impuesto.errors" class="invalid-feedback">
+                <div *ngIf="f.impuesto.errors.required">Impuesto is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="form-group">
+          <label>Precio</label>
+          <input type="number" formControlName="precio" class="form-control"
+          [(ngModel)]="catalogoService.selectCatalogo.precio" 
+            [ngClass]="{ 'is-invalid': submitted && f.precio.errors }" />
+          <div *ngIf="submitted && f.precio.errors" class="invalid-feedback">
+            <div *ngIf="f.precio.errors.required">Precio is required</div>
+          </div>
+        </div> -->
+        <div class="form-group">
+          <label class="control-label">Precio</label>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+              </div>
+              <div class="input-group-append">
+                <span class="input-group-text">0.00</span>
+              </div>
+              <input type="number" formControlName="precio" class="form-control" aria-label="Precio"
+                [(ngModel)]="catalogoService.selectCatalogo.precio"
+                [ngClass]="{ 'is-invalid': submitted && f.precio.errors }" />
+              <div *ngIf="submitted && f.precio.errors" class="invalid-feedback">
+                <div *ngIf="f.precio.errors.required">Precio is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <!--<label>URL de imagen</label>
+          <input type="url" formControlName="urlimagen" class="form-control"
+            [(ngModel)]="catalogoService.selectCatalogo.urlimagen"
+            [ngClass]="{ 'is-invalid': submitted && f.urlimagen.errors }" />
+          <div *ngIf="submitted && f.urlimagen.errors" class="invalid-feedback">
+            <div *ngIf="f.urlimagen.errors.required">URL de imagen is required</div>
+          </div> -->
+          <label for="basic-url">URL de imagen</label>
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+          </div>
+          <div class="input-group mb-3">
+            <input type="url" formControlName="urlimagen" class="form-control"
+              [(ngModel)]="catalogoService.selectCatalogo.urlimagen"
+              [ngClass]="{ 'is-invalid': submitted && f.urlimagen.errors }" aria-describedby="basic-addon3" />
+            <div *ngIf="submitted && f.urlimagen.errors" class="invalid-feedback">
+              <div *ngIf="f.urlimagen.errors.required">URL de imagen is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-primary mr-1" type="button" (click)="onSubmit()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Save</button>
+          <button class="btn btn-secondary" type="button" (click)="onReset()">Clear</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-8">
+      <h3>Catalogo data:</h3>
+      <div class="row row-cols-1 row-cols-md-1">
+        <div *ngFor="let art of Articulos" class="list-group">
+          <a class="list-group-item list-group-item-action flex-column align-items-start" (click)="editCatalogo(art)">
+            <div class="row">
+              <div class="col-sm-2">
+                <img class="img-fluid rounded float-left img-thumbnail" src="{{ art?.urlimagen }}"
+                  style="max-width:100%;width:auto;height:auto;">
+              </div>
+              <div class="col-sm-10">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ art?.claveart }}</h5>
+                  <small>Grupo: {{ art?.grupo }}</small>
+                </div>
+                <p class="mb-1">{{ art?.articulo }}</p>
+                <small class="mr-1">Impuesto: {{ art?.impuesto }} %</small>
+                <small>Precio: {{ art?.precio | currency }}</small>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
