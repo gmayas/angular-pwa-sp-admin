@@ -1,11 +1,11 @@
 {
-  "name": "GmayaS PWA Admin",
+  "name": "pwa-gmayas-angular",
   "short_name": "GmayaS PWA Admin",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",
-  "start_url": "https://api-pwa-sp-admin.herokuapp.com/",
+  "start_url": "https://api-pwa-sp-admin.herokuapp.com",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
