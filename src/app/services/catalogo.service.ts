@@ -31,7 +31,7 @@ export class CatalogoService {
           'token': localStorage.getItem('jwtToken')
         })
       };
-      //console.log('httpOptions: ', httpOptions)
+      //
       if (_.isNil(id)) {
         urlInt = environment.api_url + `/spproject/getCatalogo`;
       } else {
@@ -39,16 +39,7 @@ export class CatalogoService {
       }
       return this.http.get(urlInt, httpOptions)
         .pipe(map((data: any) => {
-          //console.log('data: ', data)
           return data;
-        }, error => {
-          this.auth.logout();
-          this.router.navigate(['home']);
-          this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
-            timeOut: 10000,
-            positionClass: 'toast-bottom-right'
-          });
-          //console.log('error profile: ', error)
         }));
     } catch (e) {
       console.log('error profile: ', e)
@@ -64,20 +55,9 @@ export class CatalogoService {
           'token': localStorage.getItem('jwtToken')
         })
       };
-      //console.log('urlInt: ', urlInt)
-      //console.log('httpOptions: ', httpOptions)
       return this.http.get(urlInt, httpOptions)
         .pipe(map((data: any) => {
-          //console.log('data: ', data)
           return data;
-        }, error => {
-          this.auth.logout();
-          this.router.navigate(['home']);
-          this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
-            timeOut: 10000,
-            positionClass: 'toast-bottom-right'
-          });
-          //console.log('error profile: ', error)
         }));
     } catch (e) {
       console.log('error profile: ', e)
@@ -86,7 +66,6 @@ export class CatalogoService {
 
   saveArticulo(dataIn: any) {
     try {
-      console.log('dataIn: ', dataIn);
       let api_url: any, params: any = {}, headers;
       params.id = _.get(dataIn, 'id');
       headers = new HttpHeaders({
@@ -109,12 +88,9 @@ export class CatalogoService {
       } else {
         api_url = environment.api_url + `/spproject/updateArticulo/${params.id}`
       };
-      //console.log('environment.api_url: ', api_url)
-      //console.log('dataArticulo: ', dataArticulo);
-      //console.log('headers: ', headers);
+      //
       return this.http.post(api_url, dataArticulo, { headers })
         .pipe(map((data: any) => {
-          //console.log('data: ', data)
           return data;
         }, error => {
           this.auth.logout();
@@ -123,10 +99,32 @@ export class CatalogoService {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           });
-          //console.log('error profile: ', error)
         }));
     } catch (e) {
       console.log('error profile: ', e)
+    }
+  }
+
+
+  getCatalogoArt(dataIn: any) {
+    try {
+      let params: any = {
+        grupo: _.get(dataIn, 'grupo',''),
+        claveart: _.get(dataIn, 'claveart',''),
+        articulo: _.get(dataIn, 'articulo','')
+      };
+      let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'token': localStorage.getItem('jwtToken')
+      });
+      //
+      let api_url: any = environment.api_url + `/spproject/getCatalogoArt`;
+      return this.http.get(api_url, { params, headers })
+        .pipe(map((data: any) => {
+          return data;
+        }));
+    } catch (e) {
+      console.log('error getBookings: ', e)
     }
   }
 }

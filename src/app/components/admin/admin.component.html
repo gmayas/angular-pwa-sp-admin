@@ -6,7 +6,7 @@
 </head>
 
 <body>
-  <div class="row">
+  <div class="row container-fluid ml-1">
     <div class="col-sm-4">
       <h3>Add articulo:</h3>
       <form [formGroup]="adminForm" autocomplete="on">
@@ -37,23 +37,10 @@
           <textarea type="text" formControlName="articulo" class="form-control"
             [(ngModel)]="catalogoService.selectCatalogo.articulo"
             [ngClass]="{ 'is-invalid': submitted && f.articulo.errors }" rows="3"></textarea>
-          <!--<input type="text" formControlName="articulo" class="form-control" 
-            [(ngModel)]="catalogoService.selectCatalogo.articulo"
-            [ngClass]="{ 'is-invalid': submitted && f.articulo.errors }" />
-          -->
           <div *ngIf="submitted && f.articulo.errors" class="invalid-feedback">
             <div *ngIf="f.articulo.errors.required">Articulo is required</div>
           </div>
         </div>
-        <!--<div class="form-group">
-          <label>Impuesto</label>
-          <input type="number" formControlName="impuesto" class="form-control"
-          [(ngModel)]="catalogoService.selectCatalogo.impuesto" 
-            [ngClass]="{ 'is-invalid': submitted && f.impuesto.errors }" />
-          <div *ngIf="submitted && f.impuesto.errors" class="invalid-feedback">
-            <div *ngIf="f.impuesto.errors.required">Impuesto is required</div>
-          </div>
-        </div> -->
         <div class="form-group">
           <label class="control-label">Impuesto</label>
           <div class="form-group">
@@ -70,15 +57,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="form-group">
-          <label>Precio</label>
-          <input type="number" formControlName="precio" class="form-control"
-          [(ngModel)]="catalogoService.selectCatalogo.precio" 
-            [ngClass]="{ 'is-invalid': submitted && f.precio.errors }" />
-          <div *ngIf="submitted && f.precio.errors" class="invalid-feedback">
-            <div *ngIf="f.precio.errors.required">Precio is required</div>
-          </div>
-        </div> -->
         <div class="form-group">
           <label class="control-label">Precio</label>
           <div class="form-group">
@@ -99,13 +77,6 @@
           </div>
         </div>
         <div class="form-group">
-          <!--<label>URL de imagen</label>
-          <input type="url" formControlName="urlimagen" class="form-control"
-            [(ngModel)]="catalogoService.selectCatalogo.urlimagen"
-            [ngClass]="{ 'is-invalid': submitted && f.urlimagen.errors }" />
-          <div *ngIf="submitted && f.urlimagen.errors" class="invalid-feedback">
-            <div *ngIf="f.urlimagen.errors.required">URL de imagen is required</div>
-          </div> -->
           <label for="basic-url">URL de imagen</label>
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
@@ -127,7 +98,22 @@
       </form>
     </div>
     <div class="col-sm-8">
-      <h3>Catalogo data:</h3>
+      <div class="row container-block">
+        <form [formGroup]="catalogoForm" autocomplete="on" class="form-inline align-items-center">
+          <label class="sr-only">Grupo</label>
+          <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2" formControlName="grupo"
+            [(ngModel)]="catalogoService.selectCatalogo.grupo" placeholder="Grupo">
+          <label class="sr-only">Clave de articulo</label>
+          <input type="text" style="text-transform:uppercase;" class="form-control mb-2 mr-sm-2"
+            formControlName="claveart" [(ngModel)]="catalogoService.selectCatalogo.claveart"
+            placeholder="Clave de articulo">
+          <label class="sr-only">Articulo</label>
+          <input type="text" class="form-control mb-2 mr-sm-2" formControlName="articulo"
+            [(ngModel)]="catalogoService.selectCatalogo.articulo" placeholder="ARTICULO">
+          <button [disabled]="loading" type="submit" class="btn btn-primary mb-2" (click)="buscar()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Buscar</button>
+        </form>
+      </div>
       <div class="row row-cols-1 row-cols-md-1">
         <div *ngFor="let art of Articulos" class="list-group">
           <a class="list-group-item list-group-item-action flex-column align-items-start" (click)="editCatalogo(art)">

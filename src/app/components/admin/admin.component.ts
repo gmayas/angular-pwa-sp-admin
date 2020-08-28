@@ -1,4 +1,4 @@
-import { Component, OnInit , OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { takeWhile, first } from "rxjs/operators";
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,6 +17,7 @@ import { catalogoModel } from '../../models/catalogo.model';
 })
 export class AdminComponent implements OnInit, OnDestroy, OnChanges {
   //
+  catalogoForm: FormGroup;
   adminForm: FormGroup;
   loading = false;
   submitted = false;
@@ -26,13 +27,12 @@ export class AdminComponent implements OnInit, OnDestroy, OnChanges {
   public user: any;
   public Articulos: any
   //
-  constructor(public auth: AuthService, 
-    public catalogoService: CatalogoService, 
+  constructor(public auth: AuthService,
+    public catalogoService: CatalogoService,
     private formBuilder: FormBuilder, private route: ActivatedRoute,
     private router: Router, private toastr: ToastrService) {
     this.user = this.auth.user();
-    //console.log('this.user.id: ', _.get(this.user.value, 'id'))
-    this.getCatalogoDesc(); 
+    this.getCatalogoDesc();
   }
 
   ngOnInit() {
@@ -41,9 +41,16 @@ export class AdminComponent implements OnInit, OnDestroy, OnChanges {
       grupo: ['', [Validators.required]],
       claveart: ['', [Validators.required]],
       articulo: ['', [Validators.required]],
-      urlimagen: ['', [Validators.required]], 
+      urlimagen: ['', [Validators.required]],
       impuesto: [0, [Validators.required]],
       precio: [0, [Validators.required]]
+    });
+
+    this.catalogoForm = this.formBuilder.group({
+      id: [null],
+      grupo: [''],
+      claveart: [''],
+      articulo: ['']
     });
   }
 
@@ -62,19 +69,15 @@ export class AdminComponent implements OnInit, OnDestroy, OnChanges {
     this.submitted = true;
     this.loading = true;
     //
-    //console.log('this.adminForm.invalid: ', this.adminForm.invalid);
-    //console.log('this.adminForm.value: ', this.adminForm.value);
     // stop here if form is invalid
     if (this.adminForm.invalid) {
-       return;
+      return;
     }
-    //console.log('this.adminForm.value: ', this.adminForm.value);
     //saveArticulo
     this.catalogoService.saveArticulo(this.adminForm.value)
       .pipe(first())
       .subscribe(
         data => {
-          //console.log('data: ', data)
           this.toastr.success('Hello, Articulo saved successfully', 'Aviso de Angular 9', {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
@@ -87,7 +90,6 @@ export class AdminComponent implements OnInit, OnDestroy, OnChanges {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           })
-          //console.log('error Register: ', error)
           this.onReset();
         });
   }
@@ -97,25 +99,81 @@ export class AdminComponent implements OnInit, OnDestroy, OnChanges {
     this.loading = false;
     this.catalogoService.selectCatalogo = new catalogoModel();
     this.adminForm.reset();
-    //console.log('this.adminForm.value: ', this.adminForm.value);
+  }
+
+  buscar() {
+    this.submitted = true;
+    this.loading = true;
+    //
+    // stop here if form is invalid
+    if (this.catalogoForm.invalid) {
+      return;
+    }
+    //
+    this.getCatalogoArt(this.catalogoForm.value);
+    //
+  }
+
+  getCatalogoArt(dataInt: any) {
+    try {
+      this.catalogoService.getCatalogoArt(dataInt)
+        .subscribe((data: any) => {
+          this.Articulos = data.data;
+          this.toastr.success('Hello: Successful search.', 'Aviso de Angular 9', {
+            timeOut: 10000,
+            positionClass: 'toast-bottom-right'
+          });
+          this.submitted = false;
+          this.loading = false;
+          this.onReset();
+        }, error => {
+          this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
+            timeOut: 10000,
+            positionClass: 'toast-bottom-right'
+          });
+          this.auth.logout();
+          this.router.navigate(['home']);
+        });
+    } catch (e) {
+      console.log('error: ', e);
+      this.auth.logout();
+      this.router.navigate(['home']);
+    }
   }
 
   editCatalogo(art: any) {
     this.catalogoService.selectCatalogo = Object.assign({}, art);
-    //console.log('Edit selectCatalogo: ', this.catalogoService.selectCatalogo)
   }
 
   deleteCatalogo(vh: any) {
     // pendiente
     this.catalogoService.selectCatalogo = Object.assign({}, vh);
-    //console.log('Edit selectCatalogo: ', this.catalogoService.selectCatalogo);
   }
 
   getCatalogoDesc() {
-    this.catalogoService.getCatalogoDesc()
-       .subscribe((data: any) => {
-        //console.log('data: ', data);
-        this.Articulos = data.data;
-      });
+    try {
+      this.catalogoService.getCatalogoDesc()
+        .subscribe((data: any) => {
+          this.Articulos = data.data;
+          this.toastr.success('Hello: Successful search.', 'Aviso de Angular 9', {
+            timeOut: 10000,
+            positionClass: 'toast-bottom-right'
+          });
+          this.submitted = false;
+          this.loading = false;
+          this.onReset();
+        }, error => {
+          this.toastr.success('Hello: Your session has expired, just log in again.', 'Aviso de Angular 9', {
+            timeOut: 10000,
+            positionClass: 'toast-bottom-right'
+          });
+          this.auth.logout();
+          this.router.navigate(['home']);
+        });
+    } catch (e) {
+      console.log('error: ', e);
+      this.auth.logout();
+      this.router.navigate(['home']);
+    }
   }
 }

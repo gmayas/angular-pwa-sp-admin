@@ -56,12 +56,8 @@ export class AuthService {
       })
     };
 
-    //console.log('environment.api_url: ', environment.api_url)
-    //console.log('user: ', emailuser, passworduser);
-
     return this.http.post(environment.api_url + '/authuser/signin', { emailuser, passworduser })
       .pipe(map((user: any) => {
-        //console.log('user Login: ', user);
         if (!user.success) { this.logout(); return Promise.reject(user); }
         localStorage.setItem('jwtToken', user.token);
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -71,7 +67,6 @@ export class AuthService {
         return user;
       }, (error: any) => {
         this.logout();
-        //console.log('error profile: ', error)
       }));
   }
 
@@ -81,18 +76,14 @@ export class AuthService {
         'Content-Type': 'application/json',
       })
     };
-    //console.log('dataIn: ', dataIn);
     const dataUser = {
       emailuser: _.get(dataIn, 'emailuser'),
       nameuser: _.get(dataIn, 'nameuser'),
       passworduser: _.get(dataIn, 'password'),
       typeiduser: _.get(dataIn, 'typeiduser')
     }
-    //console.log('environment.api_url: ', environment.api_url)
-    //console.log('dataUser: ', dataUser);
     return this.http.post(environment.api_url + '/authuser/signup', dataUser)
       .pipe(map((user: any) => {
-        //console.log('user Register: ', user);
         if (!user.success) { this.logout(); return Promise.reject(user) };
         localStorage.setItem('jwtToken', user.token);
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -102,7 +93,6 @@ export class AuthService {
         return user;
       }, (error: any) => {
         this.logout();
-        //console.log('error profile: ', error)
       }));
   }
 
@@ -113,7 +103,6 @@ export class AuthService {
     this.currentUser$.next(null);
     this.authState$.next(false);
     this.signingOut$.next(true);
-    //this.router.navigate(['home']);
   }
 
   isSigningOut() {
@@ -128,25 +117,20 @@ export class AuthService {
           'token': localStorage.getItem('jwtToken')
         })
       };
-      //console.log('httpOptions: ', httpOptions)
       return this.http.get(environment.api_url + '/authuser/profile', httpOptions)
         .pipe(first())
         .subscribe((user: any) => {
-          //console.log('user: ', user)
           this.toastr.success('Hello: Welcome ' + _.get(user.data[0], 'nameuser'), 'Aviso de Angular 9', {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           });
-          //this.router.navigate(['admin']);
           return user;
         }, error => {
           this.logout();
-          //this.router.navigate(['home']);
           this.toastr.success('Hello: Welcome, register or log in.', 'Aviso de Angular 9', {
             timeOut: 10000,
             positionClass: 'toast-bottom-right'
           });
-          //console.log('error profile: ', error)
         });
     } catch (e) {
       console.log('error profile: ', e)

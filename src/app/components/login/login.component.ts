@@ -33,17 +33,15 @@ export class LoginComponent implements OnInit {
       this.submitted = true;
       // stop here if form is invalid
       if (this.loginForm.invalid) {
-        //console.log('this.loginForm.invalid: ', this.loginForm.invalid)
         return;
       }
       //
       this.loading = true;
-      //console.log(this.f.emailuser.value, this.f.passworduser.value);
+      //
       this.auth.login(this.f.emailuser.value, this.f.passworduser.value)
         .pipe(first())
         .subscribe(
           data => {
-            console.log('data: ', data)
             this.toastr.success('Hello welcome ' + _.get(data,'nameuser'), 'Aviso de Angular 9', {
               timeOut: 10000,
               positionClass: 'toast-bottom-right'
@@ -55,7 +53,6 @@ export class LoginComponent implements OnInit {
               timeOut: 10000,
               positionClass: 'toast-bottom-right'
             });
-            //console.log('error Login: ', error)
             this.loginForm.reset();
             this.submitted = true;
             this.loading = false;

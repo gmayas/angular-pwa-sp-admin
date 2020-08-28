@@ -21,7 +21,6 @@ export class NavbarComponent implements OnInit, OnDestroy, OnChanges {
       .takeUntil(this.auth.isSigningOut())
       .subscribe((isAuth: any) => {
         this.isAuth = isAuth;
-        //console.log('this.isAuth: ', this.isAuth);
       });
   }
   

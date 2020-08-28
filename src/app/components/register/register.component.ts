@@ -24,7 +24,6 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //emailuser, nameuser, passworduser, typeiduser
     this.registerForm = this.formBuilder.group({
       emailuser: ['', [Validators.required, Validators.email]],
       nameuser: ['', Validators.required],
@@ -62,7 +61,6 @@ export class RegisterComponent implements OnInit {
                    this.router.navigate(['admin']);
                },
                error => {
-                   //this.router.navigate(['']);
                    this.toastr.error('Error register: ' + _.get(error,'error'), 'Aviso de Angular 9', {
                        timeOut: 10000,
                        positionClass: 'toast-bottom-right'
